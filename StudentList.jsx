@@ -24,15 +24,6 @@ export const StudentsList = () => {
       updateStudents(res.data);
     });
 
-    axios({
-      method: "get",
-      url: "http://localhost:8080/colleagues/" + user.userID,
-      headers: authHeader(),
-    }).then((res) => {
-      updateColleagues(res.data);
-    });
-  }, []);
-
   var studentsArrayData = [];
   for (var i = 0; i < users.length; i++) {
     if (
