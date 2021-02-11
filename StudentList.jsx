@@ -1,38 +1,36 @@
-import React, { useContext, useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import axios from "axios";
-import { AuthContext } from "../../Context/AuthContext";
-import authHeader from "../../Services/authHeader";
-
-import StudentsBar from "./StudentsBar.jsx";
-import { StudentsListItem } from "./StudentsListItem.jsx";
-
-import users from "../../data/users.json";
-
 export const StudentsList = () => {
   const { user } = useContext(AuthContext);
   const [dataLoading, setDataLoading] = useState(false);
   const [students, updateStudents] = useState([]);
   const [colleagues, updateColleagues] = useState([]);
-
+  
   useEffect(() => {
-    axios({
-      method: "get",
-      url: "http://localhost:8080/users/",
-      headers: authHeader(),
-    }).then((res) => {
-      updateStudents(res.data);
-    });
-
+      axios({
+        method: "get",
+        url: "http://localhost:8080/users/",
+        headers: authHeader(),
+      }).then((res) => {
+        updateStudents(res.data);
+      });
+      axios({
+        method: "get",
+        url: "http://localhost:8080/colleagues/" + user,userID,
+        headers: authHeader(),
+      }).then((res) => {
+        updateColleagues(res.data);
+      });
+  }, []);  
+  
   var studentsArrayData = [];
-  for (var i = 0; i < users.length; i++) {
-    if (
-      users[i]._id !== user.userID &&
-      !colleagues.includes(users[i]._id)
-    ) {
-      studentsArrayData.push(users[i]);
+  for (var i = 0; i < students.length; i++) {
+      if (
+        students[i]._id !== user.userID &&
+        !colleagues.includes(students[i]._id)
+      ) {
+        studentsArrayData.push(students[i]._id);
+      }
     }
-  }
+    const history = useHistory();
   const history = useHistory();
 
   return (
